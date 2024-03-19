@@ -24,13 +24,13 @@ func GetInfo() (GoInfoObject, error) {
 	}
 	osStr := strings.Replace(out.String(), "\n", "", -1)
 	osStr = strings.Replace(osStr, "\r\n", "", -1)
-	containsBrackVersion := strings.Contains(osStr, "[Version")
-	containsClosingBracket := strings.Contains(osStr, "]")
+	tmp1 := strings.Index(osStr, "[Version")
+	tmp2 := strings.Index(osStr, "]")
 	var ver string
-	if !containsBrackVersion || !containsClosingBracket {
+	if tmp1 == -1 || tmp2 == -1 {
 		ver = "unknown"
 	} else {
-		ver = osStr[containsBrackVersion+9 : containsClosingBracket]
+		ver = osStr[tmp1+9 : tmp2]
 	}
 	gio := GoInfoObject{Kernel: "windows", Core: ver, Platform: "unknown", OS: "windows", GoOS: runtime.GOOS, CPUs: runtime.NumCPU()}
 	gio.Hostname, _ = os.Hostname()
